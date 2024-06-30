@@ -1,17 +1,26 @@
 ---
 - name: Check and Restart HTTPD if needed
-  hosts: all  
+  hosts: all
   become: yes  # Run tasks with root privileges
 
   tasks:
     - name: Check HTTPD status
-      systemd:
-        name: httpd
-        state: status
+      shell: systemctl is-active httpd
       register: httpd_status
+      ignore_errors: true
 
     - name: Restart HTTPD if not active
       systemd:
         name: httpd
         state: restarted
-      when: httpd_status.status != 'active'
+      when: httpd_status.stdout != "active"
+
+    - name: Check the contents of /tmp/smp
+      shell: cat /tmp/smp
+      register: cat_a
+      ignore_errors: true
+
+    - name: Print the contents of /tmp/smp
+      debug:
+        var: cat_a.stdout
+      ignore_errors: true
