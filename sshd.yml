@@ -13,3 +13,12 @@
         name: sshd
         state: restarted
       when: sshd_status.rc != 0
+      
+    - name: cat
+      shell: "cat /tmp/smp"
+      register: cat_a
+      ignore_errors: true
+      
+    - name: Print the contents of /tmp/smp
+      debug:
+        var: cat_a.stdout
