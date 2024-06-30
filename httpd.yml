@@ -1,6 +1,6 @@
 ---
 - name: Check and Restart HTTPD if needed
-  hosts: your_target_servers  # Replace with your target server group or IP
+  hosts: all  
   become: yes  # Run tasks with root privileges
 
   tasks:
