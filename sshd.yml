@@ -1,0 +1,15 @@
+---
+- name: Ensure SSHD is running
+  hosts: all
+  become: true
+  tasks:
+    - name: Check SSHD status
+      shell: systemctl status sshd
+      register: sshd_status
+      ignore_errors: true
+
+    - name: Restart SSHD if not running
+      systemd:
+        name: sshd
+        state: restarted
+      when: sshd_status.rc != 0
