@@ -1,0 +1,17 @@
+---
+- name: Check and Restart HTTPD if needed
+  hosts: your_target_servers  # Replace with your target server group or IP
+  become: yes  # Run tasks with root privileges
+
+  tasks:
+    - name: Check HTTPD status
+      systemd:
+        name: httpd
+        state: status
+      register: httpd_status
+
+    - name: Restart HTTPD if not active
+      systemd:
+        name: httpd
+        state: restarted
+      when: httpd_status.status != 'active'
